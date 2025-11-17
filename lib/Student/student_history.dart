@@ -86,6 +86,7 @@ class _StudentHistoryState extends State<StudentHistory> {
   Future<void> _loadAuthData() async {
     final prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('auth_token');
+    print('DEBUG: loaded token = $_token');
   }
 
   Future<void> _fetch() async {
@@ -248,7 +249,7 @@ class _StudentHistoryState extends State<StudentHistory> {
   }
 }
 
-// --- History Card Widget (No changes needed) ---
+// --- History Card Widget (Modified) ---
 class HistoryCard extends StatelessWidget {
   final Map<String, dynamic> item;
   const HistoryCard({super.key, required this.item});
@@ -316,8 +317,9 @@ class HistoryCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          if (status != 'disapprove' && status != 'cancelled')
-            _row('Approved by:', item['approvedBy'] ?? '-'),
+          // 🔑 MODIFIED: Show 'Approved by' for all except 'cancelled'
+          if (status != 'cancelled')
+            _row('Processed by:', item['approvedBy'] ?? '-'),
 
           Row(
             children: [
